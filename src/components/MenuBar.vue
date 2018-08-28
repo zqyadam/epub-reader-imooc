@@ -1,5 +1,6 @@
 <template>
   <div class="menu-bar">
+    <!-- 菜单栏 -->
     <transition name="slide-up">
       <div class="menu-wrapper" :class="{'hide-box-shadow': showSettingBar || !show}" v-show="show">
         <div class="icon-wrapper">
@@ -16,8 +17,10 @@
         </div>
       </div>
     </transition>
+    <!-- 详细设置栏 -->
     <transition name="slide-up">
       <div class="setting-wrapper" v-show="showSettingBar">
+        <!-- 设置字体大小 -->
         <div class="setting-font-size" v-if="showTag === 0">
           <div class="preview-small" :style="{fontSize: fontSizeList[0].fontSize+'px'}">A</div>
           <div class="select">
@@ -33,6 +36,7 @@
           </div>
           <div class="preview-big" :style="{fontSize: fontSizeList[fontSizeList.length - 1].fontSize+ 'px'}">A</div>
         </div>
+        <!-- 设置主题 -->
         <div class="setting-theme" v-else-if="showTag === 1">
           <div class="setting-theme-item" v-for="(item,index) in themeList" :key="index" @click="setTheme(index)">
             <div class="preview" :style="{
@@ -41,6 +45,7 @@
             <div class="text" :class="{selected: currentTheme === index}">{{item.name}}</div>
           </div>
         </div>
+        <!-- 调整阅读进度 -->
         <div class="setting-progress" v-else-if="showTag === 2">
           <div class="progress-wrapper">
             <input type="range"
@@ -61,6 +66,7 @@
         </div>
       </div>
     </transition>
+    <!-- 目录列表 -->
     <content-view v-show="showContent" :showContent="showContent" :navigation="navigation" :bookAvailable="bookAvailable" @jumpTo="jumpTo"></content-view>
     <transition name="fade">
       <div class="content-mask" v-show="showContent" @click="hideMenuAndTitle"></div>
@@ -80,6 +86,7 @@ export default {
     };
   },
   methods: {
+    // 目录跳转
     jumpTo(href){
       this.hideMenuAndTitle();
       this.$emit('jumpTo', href);
@@ -93,25 +100,32 @@ export default {
         this.showSettingBar = true;
       }
     },
+    // 隐藏标题栏和菜单栏
     hideMenuAndTitle(){
       this.$emit('hideMenuAndTitle')
     },
+    // 隐藏设置栏
     hideSetting() {
       this.showSettingBar = false;
     },
+    // 隐藏目录栏
     hideContent() {
       this.showContent = false;
     },
+    // 设置字体大小
     setFontSize(fontSize) {
       this.$emit("setFontSize", fontSize);
     },
+    // 设置主题
     setTheme(index) {
       this.$emit("setTheme", index);
     },
+    // 进度条拖动完成后
     onProgressChange(value) {
       value = parseFloat(value);
       this.$emit("onProgressChange", value);
     },
+    // 进度条拖动过程
     onProgressInput(value) {
       this.newProgress = parseFloat(value);
     }
